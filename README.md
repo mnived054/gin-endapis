@@ -22,7 +22,7 @@ POST METHOD------> /login
 
 
 Database:=
-Used My Sql db which is used to store the data in form structured rows and columns in a tabular form.
+Used My Sql db which is used to store the data in a form of structured rows and columns in a tabular form.
 
 TO init and run the code--->prereqs.....
 1)install and setup Golang 
