@@ -9,7 +9,7 @@ import (
 
 	"gin-ecommerce/models"
 
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -34,17 +34,18 @@ func InIt() *gorm.DB {
 
 func connectionDatabase() (*gorm.DB, error) {
 
-	dbUsername := getEnv("DB_USERNAME", "root")
-	dbPassword := getEnv("DB_PASSWORD", "root")
-	dbName := getEnv("DB_NAME", "ecommerce")
-	dbHost := getEnv("DB_HOST", "breezy-gifts-push.loca.lt") // Updated to remove https://
-	dbPort := getEnv("DB_PORT", "3306")
+	// Fetch the environment variables for PostgreSQL
+	dbUsername := getEnv("DB_USERNAME", "nivedinstance_user")               // Default username for PostgreSQL is usually 'postgres'
+	dbPassword := getEnv("DB_PASSWORD", "dOB8aDlUAksWthWhnJjyEix0cvSeJS3a") // Default password (change it for your production app)
+	dbName := getEnv("DB_NAME", "nivedinstance")                            // The name of your PostgreSQL database
+	dbHost := getEnv("DB_HOST", "dpg-cu0jgjaj1k6c73c0ptsg-a")               // The Render-provided PostgreSQL host URL
+	dbPort := getEnv("DB_PORT", "5432")                                     // Default PostgreSQL port is 5432
 
-	// Build connection string without https:// and using tcp protocol
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Local", dbUsername, dbPassword, dbHost, dbPort, dbName)
+	// Create the PostgreSQL connection string
+	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUsername, dbPassword, dbName)
 
-	// Connect to the MySQL database
-	databaseConnection, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{
+	// Open a connection to PostgreSQL
+	databaseConnection, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info), // Enable logging for debugging
 	})
 
@@ -70,6 +71,7 @@ func connectionDatabase() (*gorm.DB, error) {
 }
 
 func performMigration() error {
+	// Perform migration (auto-create tables based on your models)
 	err := databaseInstance.AutoMigrate(&models.User{})
 	if err != nil {
 		return err
