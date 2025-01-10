@@ -30,7 +30,6 @@ func InIt() *gorm.DB {
 	}
 
 	return databaseInstance
-
 }
 
 func connectionDatabase() (*gorm.DB, error) {
@@ -38,11 +37,13 @@ func connectionDatabase() (*gorm.DB, error) {
 	dbUsername := getEnv("DB_USERNAME", "root")
 	dbPassword := getEnv("DB_PASSWORD", "root")
 	dbName := getEnv("DB_NAME", "ecommerce")
-	dbHost := getEnv("DB_HOST", " https://breezy-gifts-push.loca.lt")
+	dbHost := getEnv("DB_HOST", "breezy-gifts-push.loca.lt") // Updated to remove https://
 	dbPort := getEnv("DB_PORT", "3306")
 
+	// Build connection string without https:// and using tcp protocol
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Local", dbUsername, dbPassword, dbHost, dbPort, dbName)
 
+	// Connect to the MySQL database
 	databaseConnection, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info), // Enable logging for debugging
 	})
