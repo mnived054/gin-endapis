@@ -38,7 +38,7 @@ func connectionDatabase() (*gorm.DB, error) {
 	dbUsername := getEnv("DB_USERNAME", "root")
 	dbPassword := getEnv("DB_PASSWORD", "root")
 	dbName := getEnv("DB_NAME", "ecommerce")
-	dbHost := getEnv("DB_HOST", "localhost")
+	dbHost := getEnv("DB_HOST", " https://breezy-gifts-push.loca.lt")
 	dbPort := getEnv("DB_PORT", "3306")
 
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Local", dbUsername, dbPassword, dbHost, dbPort, dbName)
