@@ -84,5 +84,6 @@ func getEnv(key string, defaultVaule string) string {
 	if value == "" {
 		return defaultVaule
 	}
+
 	return value
 }
