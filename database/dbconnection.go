@@ -34,19 +34,16 @@ func InIt() *gorm.DB {
 
 func connectionDatabase() (*gorm.DB, error) {
 
-	// Fetch the environment variables for PostgreSQL
 	dbUsername := getEnv("DB_USERNAME", "nivedinstance_user")               // Default username for PostgreSQL is usually 'postgres'
 	dbPassword := getEnv("DB_PASSWORD", "dOB8aDlUAksWthWhnJjyEix0cvSeJS3a") // Default password (change it for your production app)
 	dbName := getEnv("DB_NAME", "nivedinstance")                            // The name of your PostgreSQL database
 	dbHost := getEnv("DB_HOST", "dpg-cu0jgjaj1k6c73c0ptsg-a")               // The Render-provided PostgreSQL host URL
 	dbPort := getEnv("DB_PORT", "5432")                                     // Default PostgreSQL port is 5432
 
-	// Create the PostgreSQL connection string
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUsername, dbPassword, dbName)
 
-	// Open a connection to PostgreSQL
 	databaseConnection, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info), // Enable logging for debugging
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 
 	if err != nil {
@@ -58,10 +55,9 @@ func connectionDatabase() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// Connection pool settings from environment variables
 	maxIdleConns, _ := strconv.Atoi(getEnv("DB_MAX_IDLE_CONNS", "10"))
 	maxOpenConns, _ := strconv.Atoi(getEnv("DB_MAX_OPEN_CONNS", "25"))
-	connMaxLifetime, _ := strconv.Atoi(getEnv("DB_CONN_MAX_LIFETIME", "3600")) // in seconds
+	connMaxLifetime, _ := strconv.Atoi(getEnv("DB_CONN_MAX_LIFETIME", "3600"))
 
 	sqlDatabase.SetMaxIdleConns(maxIdleConns)
 	sqlDatabase.SetMaxOpenConns(maxOpenConns)
@@ -71,7 +67,7 @@ func connectionDatabase() (*gorm.DB, error) {
 }
 
 func performMigration() error {
-	// Perform migration (auto-create tables based on your models)
+
 	err := databaseInstance.AutoMigrate(&models.User{})
 	if err != nil {
 		return err
